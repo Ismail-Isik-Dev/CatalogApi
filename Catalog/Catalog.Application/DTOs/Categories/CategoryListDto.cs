@@ -4,6 +4,6 @@ namespace Catalog.Application.DTOs.Categories
 {
     public class CategoryListDto
     {
-        public IList<Category> Categories { get; set; }
+        public IList<CategoryDto> Categories { get; set; }
     }
 }

@@ -18,30 +18,35 @@ namespace Catalog.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<CategoryListDto>> Get(string Name, [FromQuery] int[] Attributes)
+        public async Task<ActionResult<CategoryListDto>> Get(string name, [FromQuery] int[] attributes)
         {
+            // TODO: Category by attribute search operation will be written in Get action
+
             var categories = await _mediator.Send(new GetCategoryListRequest
             {
-                Name = Name,
-                Attributes = Attributes
+                Name = name,
+                Attributes = attributes
             });
 
             return Ok(categories);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] CategoryCreateDto category)
         {
+            // TODO: Category create operation will to be written
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public void Put(int id, [FromBody] CategoryUpdateDto category)
         {
+            // TODO: Category update operation will to be written
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            // TODO: Category delete operation will to be written
         }
     }
 }

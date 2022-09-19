@@ -17,38 +17,39 @@ namespace Catalog.Api.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/<ProductController>
         [HttpGet]
-        public async Task<ActionResult<ProductListDto>> Get( int Id = 0, string Name = null, string CategoryName = null, decimal MinPrice = 0, decimal MaxPrice = 0)
+        public async Task<ActionResult<ProductListDto>> Get( int id = 0, string name = null, string categoryName = null, decimal minPrice = 0, decimal maxPrice = 0)
         {
+            // TODO: Product by attribute search operation will be written in Get action
+
             var products = await _mediator.Send(new GetProductListRequest
             {
-                Id = Id,
-                Name = Name,
-                CategoryName = CategoryName,
-                MinPrice = MinPrice,
-                MaxPrice = MaxPrice
+                Id = id,
+                Name = name,
+                CategoryName = categoryName,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice
             });
 
             return Ok(products);
         }
 
-        // POST api/<ProductController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] ProductCreateDto product)
         {
+            // TODO: Product create operation will to be written
         }
 
-        // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public void Put([FromBody] ProductUpdateDto product)
         {
+            // TODO: Product update operation will to be written
         }
 
-        // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            // TODO: Product delete operation will to be written
         }
     }
 }
