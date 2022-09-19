@@ -1,4 +1,5 @@
-﻿using Catalog.Application.DTOs.Products;
+﻿using AutoMapper;
+using Catalog.Application.DTOs.Products;
 using Catalog.Application.Features.Products.Requests.Queries;
 using Catalog.Application.Persistence.Contracts;
 using Catalog.Application.Utilities;
@@ -11,11 +12,13 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public GetProductListRequestHandler(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public GetProductListRequestHandler(IProductRepository productRepository, ICategoryRepository categoryRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         public async Task<ProductListDto> Handle(GetProductListRequest request, CancellationToken cancellationToken)
@@ -57,7 +60,9 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
 
             var productList = await _productRepository.GetAllAsync(predicate , x => x.Attributes );
 
-            return new ProductListDto() { Products = productList};
+            var productListDto = _mapper.Map<List<ProductDto>>(productList);
+
+            return new ProductListDto() { Products = productListDto };
         }
     }
 }

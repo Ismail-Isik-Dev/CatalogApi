@@ -1,5 +1,4 @@
 ﻿using Catalog.Domain.Common;
-using System.ComponentModel;
 
 namespace Catalog.Domain.Entities
 {

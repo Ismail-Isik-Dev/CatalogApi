@@ -20,6 +20,8 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
 
         public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
+            // TODO: Product create operation will be refactored
+
             var validator = new CategoryCreateDtoValidator(_categoryRepository);
 
             var validationResult = await validator.ValidateAsync(request.Category);

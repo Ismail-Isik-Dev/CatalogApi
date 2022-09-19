@@ -22,6 +22,8 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
 
         public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
+            // TODO: Product create operation will be refactored
+
             var validator = new ProductCreateDtoValidator(_categoryRepository);
 
             var validationResult = await validator.ValidateAsync(request.Product);

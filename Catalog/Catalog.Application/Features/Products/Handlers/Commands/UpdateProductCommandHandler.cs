@@ -22,6 +22,8 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
 
         public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
+            // TODO: Product update operation will be refactored
+
             var validator = new ProductUpdateDtoValidator(_categoryRepository);
 
             var validatorResult = await validator.ValidateAsync(request.Product);

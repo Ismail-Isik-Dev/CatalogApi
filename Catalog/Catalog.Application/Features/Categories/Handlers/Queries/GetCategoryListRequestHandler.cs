@@ -1,4 +1,5 @@
-﻿using Catalog.Application.DTOs.Categories;
+﻿using AutoMapper;
+using Catalog.Application.DTOs.Categories;
 using Catalog.Application.Features.Categories.Requests.Queries;
 using Catalog.Application.Persistence.Contracts;
 using Catalog.Application.Utilities;
@@ -11,10 +12,12 @@ namespace Catalog.Application.Features.Categories.Handlers.Queries
     public class GetCategoryListRequestHandler : IRequestHandler<GetCategoryListRequest, CategoryListDto>
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
 
-        public GetCategoryListRequestHandler(ICategoryRepository categoryRepository)
+        public GetCategoryListRequestHandler(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         public async Task<CategoryListDto> Handle(GetCategoryListRequest request, CancellationToken cancellationToken)
@@ -43,7 +46,9 @@ namespace Catalog.Application.Features.Categories.Handlers.Queries
 
             var categoryList = await _categoryRepository.GetAllAsync(predicate, x => x.CategoryAttributes);
 
-            return new CategoryListDto() { Categories = categoryList };
+            var categoryListDto = _mapper.Map<List<CategoryDto>>(categoryList);   
+
+            return new CategoryListDto() { Categories = categoryListDto };
         }
     }
 }
