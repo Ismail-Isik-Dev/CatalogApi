@@ -46,9 +46,9 @@ namespace Catalog.Application.Features.Categories.Handlers.Queries
 
             var categoryList = await _categoryRepository.GetAllAsync(predicate, x => x.CategoryAttributes);
 
-            var categoryListDto = _mapper.Map<List<CategoryDto>>(categoryList);   
+            // var categoryListDto = _mapper.Map<List<CategoryDto>>(categoryList);   
 
-            return new CategoryListDto() { Categories = categoryListDto };
+            return new CategoryListDto() { Categories = categoryList };
         }
     }
 }

@@ -60,9 +60,9 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
 
             var productList = await _productRepository.GetAllAsync(predicate , x => x.Attributes );
 
-            var productListDto = _mapper.Map<List<ProductDto>>(productList);
+            // var productListDto = _mapper.Map<List<ProductDto>>(productList);
 
-            return new ProductListDto() { Products = productListDto };
+            return new ProductListDto() { Products = productList };
         }
     }
 }
