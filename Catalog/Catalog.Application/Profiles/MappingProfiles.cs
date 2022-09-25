@@ -13,14 +13,14 @@ namespace Catalog.Application.Profiles
             CreateMap<Product, ProductCreateDto>().ReverseMap();
             CreateMap<Product, ProductUpdateDto>().ReverseMap();
             CreateMap<Product, ProductDto>().ReverseMap();
-             // CreateMap<List<Product>, List<ProductDto>>().ReverseMap();
+            CreateMap<ProductAttribute, ProductAttributesAddDto>().ReverseMap();
             #endregion Product
 
             #region Category
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CategoryCreateDto>().ReverseMap();
             CreateMap<Category, CategoryUpdateDto>().ReverseMap();
-            // CreateMap<List<Category>, List<CategoryDto>>().ReverseMap();
+            CreateMap<CategoryAttribute, CategoryAttributesAddDto>().ReverseMap();
             #endregion Category
         }
     }

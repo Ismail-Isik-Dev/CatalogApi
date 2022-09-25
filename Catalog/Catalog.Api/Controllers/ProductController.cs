@@ -1,6 +1,6 @@
 ﻿using Catalog.Application.DTOs.Products;
+using Catalog.Application.Features.Products.Requests.Commands;
 using Catalog.Application.Features.Products.Requests.Queries;
-using Catalog.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,38 +18,53 @@ namespace Catalog.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ProductListDto>> Get( int id = 0, string name = null, string categoryName = null, decimal minPrice = 0, decimal maxPrice = 0)
+        public async Task<ActionResult<ProductListDto>> Get(int Id = 0, string Name = null, string CategoryName = null, decimal MinPrice = 0, decimal MaxPrice = 0,
+            [FromQuery] string[] attributes = null)
         {
-            // TODO: Product by attribute search operation will be written in Get action
-
             var products = await _mediator.Send(new GetProductListRequest
             {
-                Id = id,
-                Name = name,
-                CategoryName = categoryName,
-                MinPrice = minPrice,
-                MaxPrice = maxPrice
+                Id = Id,
+                Name = Name,
+                CategoryName = CategoryName,
+                MinPrice = MinPrice,
+                MaxPrice = MaxPrice,
+                Attributes = attributes
             });
 
             return Ok(products);
         }
 
         [HttpPost]
-        public void Post([FromBody] ProductCreateDto product)
+        public async Task<ActionResult> Post([FromBody] ProductCreateDto product)
         {
-            // TODO: Product create operation will to be written
+            var createdProductId = await _mediator.Send(new CreateProductCommand
+            {
+                Product = product
+            });
+
+            return RedirectToAction("Get", new { id = createdProductId });
         }
 
         [HttpPut]
-        public void Put([FromBody] ProductUpdateDto product)
+        public async Task<ActionResult> Put([FromBody] ProductUpdateDto product)
         {
-            // TODO: Product update operation will to be written
+            await _mediator.Send(new UpdateProductCommand
+            {
+                Product = product
+            });
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            // TODO: Product delete operation will to be written
+            await _mediator.Send(new DeleteProductCommand
+            {
+                Id = id
+            });
+
+            return Ok();
         }
     }
 }

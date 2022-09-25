@@ -17,8 +17,6 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
 
         public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            // TODO: Product delete operation will be refactored
-
             var deleteToCategory = await _categoryRepository.GetAsync(x => x.Id == request.Id);
 
             if (deleteToCategory == null)
@@ -26,11 +24,11 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
                 throw new Exception("Category not found!");
             }
 
-            deleteToCategory.Status = Status.Active;
+            deleteToCategory.Status = Status.Deleted;
 
             await _categoryRepository.UpdateAsync(deleteToCategory);
 
-            return Unit.Value;  
+            return Unit.Value;
         }
     }
 }

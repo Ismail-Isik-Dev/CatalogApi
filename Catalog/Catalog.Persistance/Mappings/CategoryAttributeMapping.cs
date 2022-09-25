@@ -11,8 +11,13 @@ namespace Catalog.Persistance.Mappings
         {
             builder.HasKey(x => new { x.CategoryId, x.AttributeId });
 
-            builder.HasOne(x => x.Category).WithMany(x => x.CategoryAttributes).HasForeignKey(x => x.CategoryId);
-            builder.HasOne(x => x.Attribute).WithMany(x => x.CategoryAttributes).HasForeignKey(x => x.AttributeId);
+            builder.HasOne(x => x.Category)
+                .WithMany(x => x.CategoryAttributes)
+                .HasForeignKey(x => x.CategoryId);
+
+            builder.HasOne(x => x.Attribute)
+                .WithMany(x => x.CategoryAttributes)
+                .HasForeignKey(x => x.AttributeId);
         }
     }
 }

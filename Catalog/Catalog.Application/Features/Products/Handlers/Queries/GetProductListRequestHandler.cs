@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using Catalog.Application.DTOs.Products;
+﻿using Catalog.Application.DTOs.Products;
 using Catalog.Application.Features.Products.Requests.Queries;
 using Catalog.Application.Persistence.Contracts;
 using Catalog.Application.Utilities;
+using Catalog.Domain.Common;
 using Catalog.Domain.Entities;
 using MediatR;
 
@@ -12,18 +12,19 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
 
-        public GetProductListRequestHandler(IProductRepository productRepository, ICategoryRepository categoryRepository, IMapper mapper)
+        public GetProductListRequestHandler(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
-            _mapper = mapper;
         }
 
         public async Task<ProductListDto> Handle(GetProductListRequest request, CancellationToken cancellationToken)
         {
-           var predicate = SearchPredicateBuilder.True<Product>();
+            var predicate = SearchPredicateBuilder.True<Product>();
+
+            predicate = predicate.And(x => x.Category.Status == Status.Active);
+            predicate = predicate.And(x => x.Status == Status.Active);
 
             if (request.Id != 0)
             {
@@ -50,17 +51,15 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
                 }
             }
 
-            //if (request.Attributes.Any())
-            //{
-            //    foreach(var attribute in request.Attributes)
-            //    {
-            //        predicate = predicate.And(x => x.Attributes.Any(x => x.AttributeId == attribute.Id && x.Value == attribute.Value));
-            //    }
-            //}
+            if (request.Attributes.Any())
+            {
+                foreach (var attribute in request.Attributes)
+                {
+                    predicate = predicate.And(x => x.ProductAttributes.Any(x => x.Value == attribute));
+                }
+            }
 
-            var productList = await _productRepository.GetAllAsync(predicate , x => x.Attributes );
-
-            // var productListDto = _mapper.Map<List<ProductDto>>(productList);
+            var productList = await _productRepository.GetProductsWithAttributes(predicate);
 
             return new ProductListDto() { Products = productList };
         }

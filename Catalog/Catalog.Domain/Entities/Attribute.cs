@@ -6,9 +6,10 @@ namespace Catalog.Domain.Entities
     public class Attribute: BaseDomainEntity
     {
         public string DisplayName { get; set; }
-
-        //public ICollection<ProductAttribute> Products { get; set; }
         [JsonIgnore]
-        public IList<CategoryAttribute> CategoryAttributes { get; set; }
+        public ICollection<CategoryAttribute> CategoryAttributes { get; set; }
+
+        [JsonIgnore]
+        public ICollection<ProductAttribute> ProductAttributes { get; set; }
     }
 }

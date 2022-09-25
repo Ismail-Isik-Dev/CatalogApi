@@ -19,8 +19,6 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
 
         public async Task<Unit> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            // TODO: Product update operation will be refactored
-
             var validator = new CategoryUpdateDtoValidator(_categoryRepository);
 
             var validationResult = await validator.ValidateAsync(request.Category);

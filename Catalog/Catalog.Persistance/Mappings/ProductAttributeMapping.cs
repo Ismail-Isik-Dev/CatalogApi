@@ -8,13 +8,19 @@ namespace Catalog.Persistance.Mappings
     {
         public void Configure(EntityTypeBuilder<ProductAttribute> builder)
         {
-            builder.HasKey("ProductId", "AttributeId");
+            builder.HasKey(x => new { x.ProductId, x.AttributeId });
 
-            //builder.HasOne(x => x.Product).WithMany(x => x.Attributes).HasForeignKey(x => x.ProductId);
+            builder.HasOne(x => x.Product)
+                .WithMany(x => x.ProductAttributes)
+                .HasForeignKey(x => x.ProductId);
 
-            //builder.HasOne(x => x.Attribute).WithMany(x=>x.Products).HasForeignKey(x=>x.AttributeId);
+            builder.HasOne(x => x.Attribute)
+                .WithMany(x => x.ProductAttributes)
+                .HasForeignKey(x => x.AttributeId);
 
-            builder.Property(x => x.Value).HasMaxLength(150).IsRequired();
+            builder.Property(x => x.Value)
+                .HasMaxLength(150)
+                .IsRequired();
         }
     }
 }

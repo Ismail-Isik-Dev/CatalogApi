@@ -19,8 +19,6 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
 
         public async Task<Unit> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
-            // TODO: Product delete operation will be refactored
-
             var deleteToProduct = await _productRepository.GetAsync(x => x.Id == request.Id);
 
             if (deleteToProduct == null)
@@ -28,7 +26,7 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
                 throw new Exception("Product not found!");
             }
 
-            deleteToProduct.Status = Status.Active;
+            deleteToProduct.Status = Status.Deleted;
 
             await _productRepository.UpdateAsync(deleteToProduct);
 

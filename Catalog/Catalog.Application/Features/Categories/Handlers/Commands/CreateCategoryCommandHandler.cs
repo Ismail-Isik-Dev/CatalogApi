@@ -20,18 +20,31 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
 
         public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            // TODO: Product create operation will be refactored
+            var categoryValidator = new CategoryCreateDtoValidator(_categoryRepository);
+            var categoryAttributesValidator = new CategoryAttributesAddDtoValidator();
 
-            var validator = new CategoryCreateDtoValidator(_categoryRepository);
+            var categoryValidationResult = await categoryValidator.ValidateAsync(request.Category);
 
-            var validationResult = await validator.ValidateAsync(request.Category);
-
-            if (!validationResult.IsValid)
+            if (!categoryValidationResult.IsValid)
             {
-                throw new Exception("Validation Error!");
+                throw new Exception("Category Validation Error!");
             }
 
             var categoryToCreate = _mapper.Map<Category>(request.Category);
+
+            var categoryAttributes = new List<CategoryAttribute>();
+
+            foreach (var attribute in request.Category.CategoryAttributes)
+            {
+                var categoryAttributesValidationResult = await categoryAttributesValidator.ValidateAsync(attribute);
+
+                if (!categoryAttributesValidationResult.IsValid)
+                {
+                    throw new Exception("Category Attributes Validation Error!");
+                }
+
+                categoryAttributes.Add(_mapper.Map<CategoryAttribute>(attribute));
+            }
 
             var createdCategory = await _categoryRepository.CreateAsync(categoryToCreate);
 

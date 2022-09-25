@@ -5,7 +5,8 @@ namespace Catalog.Application.Features.Categories.Requests.Queries
 {
     public class GetCategoryListRequest : IRequest<CategoryListDto>
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public int[] Attributes { get; set; }
+        public string[] Attributes { get; set; }
     }
 }

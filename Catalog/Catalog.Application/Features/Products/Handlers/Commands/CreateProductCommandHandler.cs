@@ -22,18 +22,33 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
 
         public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            // TODO: Product create operation will be refactored
+            var validatorProduct = new ProductCreateDtoValidator(_categoryRepository);
+            var validatorProductAttributes = new ProductAttributesAddValidator();
 
-            var validator = new ProductCreateDtoValidator(_categoryRepository);
+            var productValidationResult = await validatorProduct.ValidateAsync(request.Product);
 
-            var validationResult = await validator.ValidateAsync(request.Product);
-
-            if (!validationResult.IsValid)
+            if (!productValidationResult.IsValid)
             {
-                throw new Exception("Validation Exception!");
+                throw new Exception("Product Validation Exception!");
             }
 
             var productToCreate = _mapper.Map<Product>(request.Product);
+
+            var productAttributes = new List<ProductAttribute>();
+
+            foreach (var attribute in request.Product.Attributes)
+            {
+                var ProductAttributesValidatorResult = validatorProductAttributes.Validate(attribute);
+
+                if (!ProductAttributesValidatorResult.IsValid)
+                {
+                    throw new Exception("Attribute not valid!");
+                }
+
+                productAttributes.Add(_mapper.Map<ProductAttribute>(attribute));
+            }
+
+            productToCreate.ProductAttributes = productAttributes;
 
             var createdProduct = await _productRepository.CreateAsync(productToCreate);
 

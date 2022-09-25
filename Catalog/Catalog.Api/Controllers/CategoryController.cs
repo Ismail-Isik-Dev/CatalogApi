@@ -1,5 +1,5 @@
 ﻿using Catalog.Application.DTOs.Categories;
-using Catalog.Application.DTOs.Test;
+using Catalog.Application.Features.Categories.Requests.Commands;
 using Catalog.Application.Features.Categories.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,36 +17,51 @@ namespace Catalog.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CategoryListDto>> Get(string name, [FromQuery] int[] attributes)
-        {
-            // TODO: Category by attribute search operation will be written in Get action
 
+        [HttpGet]
+        public async Task<ActionResult<CategoryListDto>> Get(int id = 0, string name = null, [FromQuery] string[] attributes = null)
+        {
             var categories = await _mediator.Send(new GetCategoryListRequest
             {
                 Name = name,
-                Attributes = attributes
+                Attributes = attributes,
+                Id = id
             });
 
             return Ok(categories);
         }
 
         [HttpPost]
-        public void Post([FromBody] CategoryCreateDto category)
+        public async Task<ActionResult> Post([FromBody] CategoryCreateDto category)
         {
-            // TODO: Category create operation will to be written
+            var createdCategoryId = await _mediator.Send(new CreateCategoryCommand
+            {
+                Category = category
+            });
+
+            return RedirectToAction("Get", new { id = createdCategoryId });
         }
 
         [HttpPut]
-        public void Put(int id, [FromBody] CategoryUpdateDto category)
+        public async Task<ActionResult> Put([FromBody] CategoryUpdateDto category)
         {
-            // TODO: Category update operation will to be written
+            await _mediator.Send(new UpdateCategoryCommand
+            {
+                Category = category
+            });
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            // TODO: Category delete operation will to be written
+            await _mediator.Send(new DeleteCategoryCommand
+            {
+                Id = id
+            });
+
+            return Ok();
         }
     }
 }

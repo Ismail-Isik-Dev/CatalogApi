@@ -1,8 +1,11 @@
-﻿namespace Catalog.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Catalog.Domain.Entities
 {
     public class ProductAttribute
     {
-        //public Product Product { get; set; }
+        [JsonIgnore]
+        public Product Product { get; set; }
         public int ProductId { get; set; }
         public Attribute Attribute { get; set; }
         public int AttributeId { get; set; }
