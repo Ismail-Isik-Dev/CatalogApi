@@ -11,7 +11,17 @@ namespace Catalog.Application.DTOs.Categories.Validators
         {
             _categoryRepository = categoryRepository;
 
-            Include(new ICategoryDtoValidator(_categoryRepository));
+            RuleFor(x => x.Name)
+               .NotEmpty().WithMessage("{PropertyName} is required.")
+               .NotNull()
+               .MaximumLength(50).WithMessage("{PropertyName} must not exceed {ComparisonValue} characters.")
+               .MustAsync(async (name, token) =>
+                {
+                    var categoryIsExist = await _categoryRepository.AnyAsync(x => x.Name == name);
+
+                    return !categoryIsExist;
+                }).WithMessage("{PropertyName} already exists.");
+
         }
     }
 }

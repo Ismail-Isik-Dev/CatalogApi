@@ -14,14 +14,7 @@ namespace Catalog.Application.DTOs.Categories.Validators
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull()
-                .MaximumLength(50).WithMessage("{PropertyName} must not exceed {ComparisonValue} characters.")
-                .MustAsync(async (name, token) =>
-                {
-                    var categoryIsExist = await _categoryRepository.AnyAsync(x => x.Name == name);
-
-                    return categoryIsExist;
-                }).WithMessage("{PropertyName} already exists.");
-
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed {ComparisonValue} characters.");
         }
     }
 }
