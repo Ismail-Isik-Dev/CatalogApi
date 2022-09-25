@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Catalog.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Catalog.Persistance.Mappings
@@ -29,6 +30,49 @@ namespace Catalog.Persistance.Mappings
             builder.Property(x => x.Status)
                 .HasColumnType("int")
                 .IsRequired();
+
+            builder.ToTable("Attributes");
+
+            // Attributes table data initializer...
+
+            builder.HasData(
+                new Domain.Entities.Attribute
+                {
+                    Id = 1,
+                    Name = "Gender",
+                    DisplayName = "Cinsiyet",
+                    Status = Status.Active,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new Domain.Entities.Attribute
+                {
+                    Id = 2,
+                    Name = "Size",
+                    DisplayName = "Boyut",
+                    Status = Status.Active,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new Domain.Entities.Attribute
+                {
+                    Id = 3,
+                    Name = "Color",
+                    DisplayName = "Renk",
+                    Status = Status.Active,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new Domain.Entities.Attribute
+                {
+                    Id = 4,
+                    Name = "Brand",
+                    DisplayName = "Marka",
+                    Status = Status.Active,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                }
+            );
         }
     }
 }

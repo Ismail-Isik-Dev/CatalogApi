@@ -21,6 +21,55 @@ namespace Catalog.Persistance.Mappings
             builder.Property(x => x.Value)
                 .HasMaxLength(150)
                 .IsRequired();
+
+            builder.ToTable("ProductAttribute");
+
+            // ProductAttribute table data initializer...
+
+            builder.HasData(
+                new ProductAttribute
+                {
+                    ProductId = 1,
+                    AttributeId = 1,
+                    Value = "Erkek"
+                },
+                new ProductAttribute
+                {
+                    ProductId = 1,
+                    AttributeId = 2,
+                    Value = "XXL"
+                },
+                 new ProductAttribute
+                 {
+                     ProductId = 2,
+                     AttributeId = 2,
+                     Value = "M"
+                 },
+                 new ProductAttribute
+                 {
+                     ProductId = 3,
+                     AttributeId = 2,
+                     Value = "L"
+                 },
+                 new ProductAttribute
+                 {
+                     ProductId = 3,
+                     AttributeId = 3,
+                     Value = "Mavi"
+                 },
+                 new ProductAttribute
+                 {
+                     ProductId = 4,
+                     AttributeId = 1,
+                     Value = "Bayan"
+                 },
+                 new ProductAttribute
+                 {
+                     ProductId = 4,
+                     AttributeId = 4,
+                     Value = "Test Brand"
+                 }
+            );
         }
     }
 }

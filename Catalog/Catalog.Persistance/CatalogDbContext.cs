@@ -13,7 +13,6 @@ namespace Catalog.Persistance
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
-
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
