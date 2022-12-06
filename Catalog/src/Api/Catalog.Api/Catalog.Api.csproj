@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Catalog.Application\Catalog.Application.csproj" />
-    <ProjectReference Include="..\Catalog.Persistance\Catalog.Persistance.csproj" />
+    <ProjectReference Include="..\..\Core\Catalog.Application\Catalog.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Catalog.Persistance\Catalog.Persistance.csproj" />
   </ItemGroup>
 
 </Project>
