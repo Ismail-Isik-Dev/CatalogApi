@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
+using Catalog.Application.DTOs.Categories;
 using Catalog.Application.DTOs.Categories.Validators;
+using Catalog.Application.Exceptions;
 using Catalog.Application.Features.Categories.Requests.Commands;
 using Catalog.Application.Persistence.Contracts;
+using Catalog.Application.Utilities.Result.Contract;
 using Catalog.Domain.Entities;
+using Catalog.Persistance.Utilities.Result;
 using MediatR;
 
 namespace Catalog.Application.Features.Categories.Handlers.Commands
 {
-    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int>
+    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, IDataResult<CategoryDto>>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
@@ -18,7 +22,7 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<IDataResult<CategoryDto>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var categoryValidator = new CategoryCreateDtoValidator(_categoryRepository);
             var categoryAttributesValidator = new CategoryAttributesAddDtoValidator();
@@ -27,7 +31,7 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
 
             if (!categoryValidationResult.IsValid)
             {
-                throw new Exception("Category Validation Error!");
+                throw new ValidationException(categoryValidationResult);
             }
 
             var categoryToCreate = _mapper.Map<Category>(request.Category);
@@ -40,7 +44,7 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
 
                 if (!categoryAttributesValidationResult.IsValid)
                 {
-                    throw new Exception("Category Attributes Validation Error!");
+                    throw new ValidationException(categoryAttributesValidationResult);
                 }
 
                 categoryAttributes.Add(_mapper.Map<CategoryAttribute>(attribute));
@@ -48,7 +52,7 @@ namespace Catalog.Application.Features.Categories.Handlers.Commands
 
             var createdCategory = await _categoryRepository.CreateAsync(categoryToCreate);
 
-            return createdCategory.Id;
+            return new SuccessDataResult<CategoryDto>(_mapper.Map<CategoryDto>(createdCategory), "Category created.");
         }
     }
 }

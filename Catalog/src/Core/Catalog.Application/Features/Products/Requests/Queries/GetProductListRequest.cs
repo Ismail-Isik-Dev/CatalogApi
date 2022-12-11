@@ -1,9 +1,10 @@
 ﻿using Catalog.Application.DTOs.Products;
+using Catalog.Application.Utilities.Result.Contract;
 using MediatR;
 
 namespace Catalog.Application.Features.Products.Requests.Queries
 {
-    public class GetProductListRequest : IRequest<ProductListDto>
+    public class GetProductListRequest : IRequest<IDataResult<ProductListDto>>
     {
         public int Id { get; set; }
         public string Name { get; set; }

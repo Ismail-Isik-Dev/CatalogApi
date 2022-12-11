@@ -2,13 +2,15 @@
 using Catalog.Application.Features.Products.Requests.Queries;
 using Catalog.Application.Persistence.Contracts;
 using Catalog.Application.Utilities;
+using Catalog.Application.Utilities.Result.Contract;
 using Catalog.Domain.Common;
 using Catalog.Domain.Entities;
+using Catalog.Persistance.Utilities.Result;
 using MediatR;
 
 namespace Catalog.Application.Features.Products.Handlers.Queries
 {
-    public class GetProductListRequestHandler : IRequestHandler<GetProductListRequest, ProductListDto>
+    public class GetProductListRequestHandler : IRequestHandler<GetProductListRequest, IDataResult<ProductListDto>>
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
@@ -19,7 +21,7 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<ProductListDto> Handle(GetProductListRequest request, CancellationToken cancellationToken)
+        public async Task<IDataResult<ProductListDto>> Handle(GetProductListRequest request, CancellationToken cancellationToken)
         {
             var predicate = SearchPredicateBuilder.True<Product>();
 
@@ -61,7 +63,9 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
 
             var productList = await _productRepository.GetProductsWithAttributes(predicate);
 
-            return new ProductListDto() { Products = productList };
+            var productListDto = new ProductListDto() { Products = productList };
+
+            return new SuccessDataResult<ProductListDto>(productListDto);
         }
     }
 }

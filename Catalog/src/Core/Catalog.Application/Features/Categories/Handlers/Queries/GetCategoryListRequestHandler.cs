@@ -3,14 +3,16 @@ using Catalog.Application.DTOs.Categories;
 using Catalog.Application.Features.Categories.Requests.Queries;
 using Catalog.Application.Persistence.Contracts;
 using Catalog.Application.Utilities;
+using Catalog.Application.Utilities.Result.Contract;
 using Catalog.Domain.Common;
 using Catalog.Domain.Entities;
+using Catalog.Persistance.Utilities.Result;
 using MediatR;
 using System;
 
 namespace Catalog.Application.Features.Categories.Handlers.Queries
 {
-    public class GetCategoryListRequestHandler : IRequestHandler<GetCategoryListRequest, CategoryListDto>
+    public class GetCategoryListRequestHandler : IRequestHandler<GetCategoryListRequest, IDataResult<CategoryListDto>>
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -19,7 +21,7 @@ namespace Catalog.Application.Features.Categories.Handlers.Queries
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<CategoryListDto> Handle(GetCategoryListRequest request, CancellationToken cancellationToken)
+        public async Task<IDataResult<CategoryListDto>> Handle(GetCategoryListRequest request, CancellationToken cancellationToken)
         {
             var predicate = SearchPredicateBuilder.True<Category>();
 
@@ -45,7 +47,14 @@ namespace Catalog.Application.Features.Categories.Handlers.Queries
 
             var categoryList = await _categoryRepository.GetCategoriesWithAttributes(predicate);
 
-            return new CategoryListDto() { Categories = categoryList };
+            if (categoryList.Count == 0)
+            {
+                new ErrorDataResult<CategoryListDto>(null, "Category not found!");
+            }
+
+            var categoryListDto = new CategoryListDto { Categories = categoryList };
+
+            return new SuccessDataResult<CategoryListDto>(categoryListDto);
         }
     }
 }

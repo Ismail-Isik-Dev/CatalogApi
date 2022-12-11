@@ -40,13 +40,13 @@ app.MapControllers();
 
 // Create database and initial data...
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<CatalogDbContext>();
-    context.Database.Migrate();
-}
+//    var context = services.GetRequiredService<CatalogDbContext>();
+//    context.Database.Migrate();
+//}
 
 
 app.Run();

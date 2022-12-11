@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
+using Catalog.Application.DTOs.Products;
 using Catalog.Application.DTOs.Products.Validators;
+using Catalog.Application.Exceptions;
 using Catalog.Application.Features.Products.Requests.Commands;
 using Catalog.Application.Persistence.Contracts;
+using Catalog.Application.Utilities.Result.Contract;
 using Catalog.Domain.Entities;
+using Catalog.Persistance.Utilities.Result;
 using MediatR;
 
 namespace Catalog.Application.Features.Products.Handlers.Commands
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, IDataResult<ProductDto>>
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
@@ -20,7 +24,7 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<IDataResult<ProductDto>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var validatorProduct = new ProductCreateDtoValidator(_categoryRepository);
             var validatorProductAttributes = new ProductAttributesAddValidator();
@@ -29,7 +33,7 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
 
             if (!productValidationResult.IsValid)
             {
-                throw new Exception("Product Validation Exception!");
+                throw new ValidationException(productValidationResult);
             }
 
             var productToCreate = _mapper.Map<Product>(request.Product);
@@ -42,7 +46,7 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
 
                 if (!ProductAttributesValidatorResult.IsValid)
                 {
-                    throw new Exception("Attribute not valid!");
+                    throw new ValidationException(ProductAttributesValidatorResult);
                 }
 
                 productAttributes.Add(_mapper.Map<ProductAttribute>(attribute));
@@ -52,7 +56,7 @@ namespace Catalog.Application.Features.Products.Handlers.Commands
 
             var createdProduct = await _productRepository.CreateAsync(productToCreate);
 
-            return createdProduct.Id;
+            return new SuccessDataResult<ProductDto>(_mapper.Map<ProductDto>(createdProduct));
         }
     }
 }
