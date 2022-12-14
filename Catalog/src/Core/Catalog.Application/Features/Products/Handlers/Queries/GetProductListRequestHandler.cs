@@ -53,13 +53,13 @@ namespace Catalog.Application.Features.Products.Handlers.Queries
                 }
             }
 
-            if (request.Attributes.Any())
-            {
-                foreach (var attribute in request.Attributes)
-                {
-                    predicate = predicate.And(x => x.ProductAttributes.Any(x => x.Value == attribute));
-                }
-            }
+            //if (request.Attributes.Any())
+            //{
+            //    foreach (var attribute in request.Attributes)
+            //    {
+            //        predicate = predicate.And(x => x.ProductAttributes.Any(x => x.Value == attribute));
+            //    }
+            //}
 
             var productList = await _productRepository.GetProductsWithAttributes(predicate);
 
