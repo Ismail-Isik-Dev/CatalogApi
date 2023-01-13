@@ -11,5 +11,6 @@ namespace Catalog.Application.DTOs.Categories
         public DateTime ModifiedDate { get; set; }
         public IEnumerable<string> CategoryAttributes { get; set; }
         public int Test { get; set; }
+        public int TestTwo { get; set; }
     }
 }
