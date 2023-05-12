@@ -6,6 +6,7 @@ namespace Catalog.Persistance.Mappings
 {
     public class ProductAttributeMapping : IEntityTypeConfiguration<ProductAttribute>
     {
+        // Test comment
         public void Configure(EntityTypeBuilder<ProductAttribute> builder)
         {
             builder.HasKey(x => new { x.ProductId, x.AttributeId });
