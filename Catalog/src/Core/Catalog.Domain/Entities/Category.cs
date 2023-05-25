@@ -5,7 +5,7 @@ namespace Catalog.Domain.Entities
 {
     public class Category : BaseDomainEntity, IEntity
     {
-        // TestComment
+        // TestComment 1
         public ICollection<CategoryAttribute> CategoryAttributes { get; set; }
 
         [JsonIgnore]
