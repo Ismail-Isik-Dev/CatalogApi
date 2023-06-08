@@ -7,7 +7,7 @@ namespace Catalog.Test
         [Fact]
         public void Test1()
         {
-            // Test will write
+            // Test will write 1234
         }
     }
 }
