@@ -37,8 +37,6 @@ namespace Catalog.Test.Mocks
 
             var mockRepository = new Mock<IProductRepository>();
 
-            mockRepository.Setup(x => x.GetProductsWithAttributes(It.IsAny<Expression<Func<Domain.Entities.Product, bool>>>())).ReturnsAsyn(products);
-
             mockRepository.Setup(x => x.CreateAsync(It.IsAny<Domain.Entities.Product>())).ReturnsAsync((Domain.Entities.Product product) => 
             {
                 products.Add(product);
